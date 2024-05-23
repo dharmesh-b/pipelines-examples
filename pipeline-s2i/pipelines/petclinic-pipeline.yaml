@@ -14,7 +14,7 @@ spec:
     description: The application deployment name
   - name: APP_GIT_URL
     type: string
-    default: https://github.com/siamaksade/spring-petclinic/
+    default: https://github.com/dharmesh-b/spring-petclinic/
     description: The application git repository url
   - name: APP_GIT_REVISION
     type: string
