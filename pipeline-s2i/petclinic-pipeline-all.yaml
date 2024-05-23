@@ -309,7 +309,7 @@ spec:
         app: spring-petclinic
     spec:
       containers:
-      - image: quay.io/siamaksade/spring-petclinic:latest
+      - image: quay.io/dharmesh-b/spring-petclinic:latest
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
