@@ -681,10 +681,31 @@ apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: petclinic-event-listener
+  namespace: demo
 spec:
-  serviceAccountName: pipeline
   triggers:
-    - triggerRef: petclinic-event-trigger 
+    - name: petclinic-event-trigger
+      bindings:
+        - ref: petclinic-pipeline-binding
+      template:
+        ref: trigger-template-petclinic-deploy
+      interceptors:
+        - name: cel
+          params:
+            - name: filter
+              value: "body.ref == 'refs/heads/main'"
+        - name: github
+          params:
+            - name: secretRef
+              value:
+                secretName: github-secret
+                secretKey: secretToken
+        - name: webhook
+          params:
+            - name: url
+              value: "http://el-petclinic-event-listener-demo.apps.tf-dbhamre.hrw2.p1.openshiftapps.com"
+            - name: method
+              value: "POST"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
