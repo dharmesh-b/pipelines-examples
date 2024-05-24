@@ -598,12 +598,53 @@ metadata:
   name: petclinic-event-listener
 spec:
   serviceAccountName: pipeline
-  triggers:
-  - bindings:
-    - kind: ClusterTriggerBinding
-      ref: github-push
-    template:
-      name: trigger-template-petclinic-deploy
+ triggers:
+    - triggerRef: petclinic-event-trigger
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: petclinic-event-trigger
+  namespace: demo
+spec:
+  serviceAccountName: pipeline
+  interceptors:
+    - ref:
+        name: "github"
+      params:
+        - name: "secretRef"
+          value:
+            secretName: github-secret
+            secretKey: secretToken
+        - name: "eventTypes"
+          value: ["push"]
+  bindings:
+    - ref: petclinic-event-binding
+  template:
+    ref: trigger-template-petclinic-deploy
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-secret
+  namespace: demo
+type: Opaque
+stringData:
+  secretToken: "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"
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: petclinic-event-binding
+  namespace: demo
+spec:
+  params:
+  - name: git-repo-url
+    value: $(body.repository.url)
+  - name: git-repo-name
+    value: $(body.repository.name)
+  - name: git-revision
+    value: $(body.head_commit.id)
 ---
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
@@ -673,3 +714,4 @@ spec:
     requests:
       storage: 5Gi
   volumeMode: Filesystem
+  
