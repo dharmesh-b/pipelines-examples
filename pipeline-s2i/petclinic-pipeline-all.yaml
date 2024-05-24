@@ -346,7 +346,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: EventListener
     app.kubernetes.io/part-of: Triggers
-    eventlistener: el-petclinic-event-listener
+    eventlistener: petclinic-event-listener
   name: el-petclinic-event-listener
 spec:
   port:
@@ -595,7 +595,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: el-petclinic-event-listener
+  name: petclinic-event-listener
 spec:
   serviceAccountName: pipeline
   triggers:
