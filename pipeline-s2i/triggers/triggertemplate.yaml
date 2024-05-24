@@ -23,7 +23,7 @@ spec:
           - name: APP_NAME
             value: spring-petclinic
           - name: APP_GIT_URL
-            value: 'https://github.com/siamaksade/spring-petclinic/'
+            value: 'https://github.com/dharmesh-b/spring-petclinic/'
           - name: APP_GIT_REVISION
             value: $(params.git-revision)
           - name: APP_IMAGE_STREAM
