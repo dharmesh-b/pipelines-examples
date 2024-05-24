@@ -664,6 +664,12 @@ spec:
             secretKey: secretToken
         - name: "eventTypes"
           value: ["push"]
+        name: webhook
+      params:
+        - name: url
+            value: "http://el-petclinic-event-listener-demo.apps.tf-dbhamre.hrw2.p1.openshiftapps.com"
+              - name: method
+                value: "POST"
   bindings:
     - ref: petclinic-event-binding
   template:
@@ -686,22 +692,6 @@ spec:
   serviceAccountName: pipeline
   triggers:
     - name: petclinic-event-trigger
-      interceptors:
-        - ref:
-            name: "github"
-          params:
-          - name: "secretRef"
-            value:
-              secretName: gethub-secret
-              secretKey: secretToken
-          - name: "eventTypes"
-            value: ["push"]
-           name: webhook
-          params:
-              - name: url
-                value: "http://el-petclinic-event-listener-demo.apps.tf-dbhamre.hrw2.p1.openshiftapps.com"
-              - name: method
-                value: "POST"
       bindings:
         - ref: petclinic-pipeline-binding
       template:
