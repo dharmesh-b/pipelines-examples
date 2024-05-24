@@ -592,7 +592,7 @@ spec:
   workspaces:
   - name: source
 ---
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: petclinic-event-listener
@@ -605,7 +605,7 @@ spec:
     template:
       name: trigger-template-petclinic-deploy
 ---
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: trigger-template-petclinic-deploy
