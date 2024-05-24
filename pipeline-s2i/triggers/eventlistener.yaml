@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
-  name: petclinic-event-listener
+  name: el-petclinic-event-listener
 spec:
   serviceAccountName: pipeline
   triggers:
