@@ -592,20 +592,20 @@ spec:
   workspaces:
   - name: source
 ---
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: EventListener
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
 metadata:
-  name: petclinic-event-listener
+  name: petclinic-event-binding
 spec:
-  serviceAccountName: pipeline
-  triggers:
-  - bindings:
-    - kind: ClusterTriggerBinding
-      ref: github-push
-    template:
-      name: trigger-template-petclinic-deploy
+  params:
+  - name: git-repo-url
+    value: $(body.repository.url)
+  - name: git-repo-name
+    value: $(body.repository.name)
+  - name: git-revision
+    value: $(body.head_commit.id)
 ---
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: trigger-template-petclinic-deploy
@@ -647,6 +647,44 @@ spec:
       - configMap:
           name: maven-settings
         name: maven-settings
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: Trigger
+metadata:
+  name: petclinic-event-trigger
+spec:
+  serviceAccountName: pipeline
+  interceptors:
+    - ref:
+        name: "github"
+      params:
+        - name: "secretRef"
+          value:
+            secretName: github-secret
+            secretKey: secretToken
+        - name: "eventTypes"
+          value: ["push"]
+  bindings:
+    - ref: petclinic-event-binding
+  template:
+    ref: trigger-template-petclinic-deploy
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: github-secret
+type: Opaque
+stringData:
+  secretToken: "1234567"
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: petclinic-event-listener
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - triggerRef: petclinic-event-trigger 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
