@@ -309,7 +309,7 @@ spec:
         app: spring-petclinic
     spec:
       containers:
-      - image: quay.io/rh-ee-dbhamre/spring-petclinic:latest
+      - image: quay.io/siamaksade/spring-petclinic:latest
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -380,7 +380,7 @@ spec:
     description: The application deployment name
     name: APP_NAME
     type: string
-  - default: https://github.com/dharmesh-b/spring-petclinic/
+  - default: https://github.com/siamaksade/spring-petclinic/
     description: The application git repository url
     name: APP_GIT_URL
     type: string
@@ -592,52 +592,20 @@ spec:
   workspaces:
   - name: source
 ---
-apiVersion: triggers.tekton.dev/v1beta1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: petclinic-event-listener
 spec:
   serviceAccountName: pipeline
   triggers:
-    - triggerRef: petclinic-event-trigger
+  - bindings:
+    - kind: ClusterTriggerBinding
+      ref: github-push
+    template:
+      name: trigger-template-petclinic-deploy
 ---
-apiVersion: triggers.tekton.dev/v1beta1
-kind: Trigger
-metadata:
-  name: petclinic-event-trigger
-  namespace: demo
-spec:
-  serviceAccountName: pipeline
-  interceptors:
-    - ref:
-        name: "github"
-      params:
-        - name: "secretRef"
-          value:
-            secretName: github-secret
-            secretKey: secretToken
-        - name: "eventTypes"
-          value: ["push"]
-  bindings:
-    - ref: petclinic-event-binding
-  template:
-    ref: trigger-template-petclinic-deploy
----
-apiVersion: triggers.tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: petclinic-event-binding
-  namespace: demo
-spec:
-  params:
-  - name: git-repo-url
-    value: $(body.repository.url)
-  - name: git-repo-name
-    value: $(body.repository.name)
-  - name: git-revision
-    value: $(body.head_commit.id)
----
-apiVersion: triggers.tekton.dev/v1beta1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: trigger-template-petclinic-deploy
@@ -662,7 +630,7 @@ spec:
       - name: APP_NAME
         value: spring-petclinic
       - name: APP_GIT_URL
-        value: https://github.com/dharmesh-b/spring-petclinic/
+        value: https://github.com/siamaksade/spring-petclinic/
       - name: APP_GIT_REVISION
         value: $(params.git-revision)
       - name: APP_IMAGE_STREAM
@@ -705,4 +673,3 @@ spec:
     requests:
       storage: 5Gi
   volumeMode: Filesystem
-  
