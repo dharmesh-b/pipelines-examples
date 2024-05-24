@@ -630,7 +630,7 @@ metadata:
   namespace: demo
 type: Opaque
 stringData:
-  secretToken: "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"
+  secretToken: "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"
 ---
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerBinding
