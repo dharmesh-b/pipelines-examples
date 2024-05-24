@@ -9,4 +9,4 @@ spec:
         - kind: ClusterTriggerBinding
           ref: github-push
       template:
-        name: trigger-template-petclinic-deploy
+        ref: trigger-template-petclinic-deploy
