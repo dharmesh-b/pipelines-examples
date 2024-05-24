@@ -5,6 +5,7 @@ metadata:
 spec:
   pipelineRef:
     name: petclinic-deploy
+  serviceAccountName: pipeline
   workspaces:
   - name: app-source
     persistentVolumeClaim:
