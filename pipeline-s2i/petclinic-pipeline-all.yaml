@@ -632,9 +632,9 @@ spec:
       - name: APP_GIT_URL
         value: https://github.com/dharmesh-b/spring-petclinic/
       - name: APP_GIT_REVISION
-        value: $(params.git-revision)
+        value: $(tt.params.git-revision)
       - name: APP_IMAGE_STREAM
-        value: spring-petclinic:$(params.git-revision)
+        value: spring-petclinic:$(tt.params.git-revision)
       pipelineRef:
         name: petclinic-deploy
       workspaces:
