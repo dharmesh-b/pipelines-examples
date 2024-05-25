@@ -687,7 +687,7 @@ spec:
   triggers:
     - name: petclinic-event-trigger
       bindings:
-        - ref: petclinic-pipeline-binding
+        - ref: petclinic-event-binding
       template:
         ref: trigger-template-petclinic-deploy
 ---
