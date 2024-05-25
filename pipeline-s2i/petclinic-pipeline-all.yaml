@@ -654,7 +654,7 @@ metadata:
   name: petclinic-event-trigger
 spec:
   serviceAccountName: pipeline
-  interceptors:
+    interceptors:
     - ref:
         name: "github"
       params:
@@ -664,12 +664,6 @@ spec:
             secretKey: secretToken
         - name: "eventTypes"
           value: ["push"]
-        name: webhook
-      params:
-        - name: url
-            value: "http://el-petclinic-event-listener-demo.apps.tf-dbhamre.hrw2.p1.openshiftapps.com"
-              - name: method
-                value: "POST"
   bindings:
     - ref: petclinic-event-binding
   template:
@@ -681,7 +675,7 @@ metadata:
   name: github-secret
 type: Opaque
 stringData:
-  secretToken: "1234567"
+  secretToken: "Redhat@123"
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
